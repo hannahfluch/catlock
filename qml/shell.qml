@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import QtMultimedia
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Services.Pam
@@ -16,6 +17,14 @@ ShellRoot {
     property string pendingPassword: ""
     property bool failed: false
     property string failureMessage: ""
+
+    // Play once for the whole lock screen, regardless of the number of outputs.
+    MediaPlayer {
+        source: Qt.resolvedUrl("assets/oiia-oiia-sound.mp3")
+        loops: MediaPlayer.Infinite
+        audioOutput: AudioOutput {}
+        Component.onCompleted: play()
+    }
 
     function submit() {
         if (pam.active || password.length === 0)
@@ -70,7 +79,7 @@ ShellRoot {
                     anchors.centerIn: parent
                     width: Math.min(480, parent.width * 0.6)
                     height: Math.min(480, parent.height * 0.6)
-                    source: Qt.resolvedUrl("cat.gif")
+                    source: Qt.resolvedUrl("assets/cat.gif")
                     fillMode: Image.PreserveAspectFit
                     playing: true
                     asynchronous: true
